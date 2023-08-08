@@ -1,38 +1,36 @@
-
-const dotenv = require("dotenv");
+require("dotenv").config();
 const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+
 const app = express();
-
-dotenv.config();
-
-app.post('/users', async(req, res)=> {
-    const {name, email, profile_image, password} = req.body
-
-    await myDataSoure.query(
-    `INSERT INTO users(
-        name,
-        email,
-        profile_image,
-        password
-    ) VALUES ('hjk','hjk123@gmail.com','https://github.com/amacneil/dbmate#command-line-options',password4);`,
-    [name,email,profile_image,password]
-);
-    res.status(201).json({message: "sucessfully created"});
-    
-})
 
 const {DataSource} = require('typeorm');
 
-const myDataSoure = new DataSource({
-    type: process.env.TYPEORM_CONNECTION,
-    host: process.env.TYPEORM_HOST,
-    port: process.env.TYPEORM_PORT,
-    username: process.env.TYPEORM_USERNAME,
-    password: process.env.TYPEORM_PASSWORD,
-    database: process.env.TYPEORM_DATABASE
+const appDataSoure = new DataSource({
+    type: process.env.DB_CONNECTION,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
 })
 
-myDataSoure.initialize().then(() => {
-    console.log("Data Source has been initialized!")
-    const DataSource = myDataSoure.query('SELECT * FROM users')
-});
+app.use(express.json());
+app.use(cors());
+app.use(morgan('combined'))
+
+app.get('/ping', function (req, res) {
+  res.json({message: 'pong'})
+})
+ 
+app.listen(3000, async () => {
+    await appDataSoure
+    .initialize()
+    .then(() => {
+        console.log("Data Source has been initialized!");  
+    })
+    .catch((error) => {console.error("Error during Data Source has been initialized", error)});
+
+    console.log(`Listening to request on port: ${3000}`);
+})
