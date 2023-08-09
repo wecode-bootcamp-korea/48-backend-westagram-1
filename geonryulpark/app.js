@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
+const bcrypt = require("bcrypt");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -20,6 +21,19 @@ const appDataSource = new DataSource({
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.post("/user", async (req, res, next) => {
+  // name, email, password
+  const { name, email, password } = req.body;
+  const hashpassword = bcrypt.hashSync(password, 12);
+  await appDataSource.query(
+    `INSERT INTO users
+    (name,email,password)
+    VALUES (? , ? , ?);`,
+    [name, email, hashpassword]
+  );
+  res.status(201).json({ message: "userCreated" });
+});
 
 app.get("/ping", function (req, res, next) {
   res.json({ message: "pong" });
