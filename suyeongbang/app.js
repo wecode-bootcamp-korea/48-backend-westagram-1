@@ -20,9 +20,33 @@ const app = express();
 // app.use(): req -> app.js(middleware) -> res
 app.use(cors());
 app.use(morgan("combined"));
+app.use(express.json());
 
+// Health check
 app.get("/ping", function (req, res) {
   res.json({ message: "pong" });
+});
+
+// Create users
+app.post("/users", async (req, res) => {
+  const { name, email, profile_image, password } = req.body;
+  await appDataSource.query(
+    `INSERT INTO users (
+      name,
+      email,
+      profile_image,
+      password
+      ) VALUES (?, ?, ?, ?);`,
+    [name, email, profile_image, password]
+  );
+  res.status(201).json({ message: "successfully created" });
+});
+
+// Get all users
+app.get("/users", async (req, res) => {
+  await appDataSource.query(`SELECT * FROM users;`, (err, rows) => {
+    res.status(200).json(rows);
+  });
 });
 
 // 서버가 동작하고 DB가 연결되어야함 (비동기적으로 수행되어 언제든지 호출)
