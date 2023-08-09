@@ -22,8 +22,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.post("/user", async (req, res, next) => {
-  // name, email, password
+app.post("/users/signup", async (req, res, next) => {
   const { name, email, password } = req.body;
   const hashpassword = bcrypt.hashSync(password, 12);
   await appDataSource.query(
