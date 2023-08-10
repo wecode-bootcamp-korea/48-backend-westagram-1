@@ -46,10 +46,11 @@ app.get("/ping", function (req, res, next) {
 });
 
 app.post("/user", async (req, res, next) => {
-  // name, email, password
+  const saltRounds = 12;
+
   const { name, email, password } = req.body;
 
-  const hashpassword = bcrypt.hashSync(password, 12);
+  const hashpassword = bcrypt.hashSync(password, saltRounds);
 
   await appDataSource.query(
     `INSERT INTO users
