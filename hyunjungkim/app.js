@@ -2,12 +2,12 @@ require("dotenv").config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const bcrypt = require('bcrypt');
 const app = express();
 
 const {DataSource} = require('typeorm');
 
 const appDataSoure = new DataSource({
-    database_url: process.env.DATABASE_URL,
     type: process.env.DB_CONNECTION,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -28,16 +28,17 @@ app.get('/ping', (req, res) => {
 });
 
 
-app.post('/books', async(req, res) => {
-    const {title, description, cover_image} = req.body;
+app.post('/users', async(req, res) => {
+    const {name, email, profile_image, password} = req.body;
 
     await appDataSoure.query(
-        `INSERT INTO books(
-            title, 
-            description,
-            cover_image
-        ) VALUES (?, ?, ?);`,
-        [title, description, cover_image]
+        `INSERT INTO users(
+            name, 
+            email,
+            profile_image,
+            password
+        ) VALUES (?, ?, ?, ?);`,
+        [name, email, profile_image, password]
     );
     res.status(201).json({message: "user Creaeted"});
 });
