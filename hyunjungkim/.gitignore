@@ -132,7 +132,8 @@ web_modules/
 .env.local
 
 #schema.sql
-schema.sql
+db/schema.sql
+db/
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
