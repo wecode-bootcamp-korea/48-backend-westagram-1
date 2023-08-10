@@ -40,21 +40,6 @@ app.post("/users", async (req, res) => {
   res.status(201).json({ message: "successfully created" });
 });
 
-// main();
-
-// app.get("/users", async (req, res) => {
-//   await myDataSource.query(
-//     `SELECT
-//           users.user_id,
-//           users.password,
-//           users.email
-//       FROM users`,
-//     (err, rows) => {
-//       res.status(200).json(rows);
-//     }
-//   );
-// });
-
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
 });
