@@ -93,7 +93,8 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `user_mail_ukey` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -117,4 +118,6 @@ CREATE TABLE `users` (
 --
 
 LOCK TABLES `schema_migrations` WRITE;
+INSERT INTO `schema_migrations` (version) VALUES
+  ('20230809052209');
 UNLOCK TABLES;
